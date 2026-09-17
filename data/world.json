@@ -1,0 +1,23 @@
+{
+  "title": "双龙余烬",
+  "canonVersion": "fan-fiction-mvp-1",
+  "initialScene": "夏末祭典后的岛田城，庭院灯火将熄，父亲刚讲完双龙复仇的古老故事。",
+  "locations": ["岛田城", "花村", "黑守望设施", "尼泊尔寺院", "流浪之路"],
+  "rules": [
+    "角色不能知道其当前时代之后才发生的事件",
+    "已完成的关键节点不可被撤销",
+    "重大伤亡、身份改变与地点跃迁必须经主持人批准",
+    "源氏与半藏不能替对方决定内心想法或行动",
+    "所有世界状态更新必须是结构化且可审计的"
+  ],
+  "forbiddenAnachronisms": ["智能手机直播", "社交媒体热搜", "太空传送门", "现代网络梗"],
+  "milestones": [
+    {"id":"childhood","title":"童年与家庭纽带","stage":0,"required":true},
+    {"id":"father_death","title":"父亲之死与责任转移","stage":1,"required":true},
+    {"id":"duel","title":"兄弟决斗与源氏‘死亡’","stage":2,"required":true},
+    {"id":"cyborg_rebirth","title":"改造与新生","stage":3,"required":true},
+    {"id":"hanzo_exile","title":"半藏的流浪与赎罪","stage":4,"required":true},
+    {"id":"zenyatta","title":"禅雅塔的教诲与自我接纳","stage":5,"required":true},
+    {"id":"reunion","title":"花村重逢与和解","stage":6,"required":true}
+  ]
+}
