@@ -1,36 +1,19 @@
-# 双龙余烬：Node.js 主持人-执行者多智能体叙事系统
+# 双龙余烬 v2：角色扎根型 Node.js 多智能体叙事系统
 
-这是根据附件方案实现的**可运行 MVP**。系统包含两个角色执行者（源氏、半藏）、一个按风险唤醒的主持人、共享世界状态、分阶段人物弧线、短期历史、轻量长期记忆检索、行为护栏、关键节点推进、REST API、SSE 实时事件与浏览器控制台。
+这是一个主持人—执行者叙事系统。v2 已推倒早期“自由源氏 / 荣誉半藏”的扁平模型，改为依据现行官方英雄资料、故事线索和游戏互动语音构建的多层角色模型。
 
-> 本项目是非商业同人技术演示。角色与世界观相关权利归各自权利人所有。默认知识库仅用于展示软件架构，并不宣称是完整官方时间线。
+> 非商业同人技术演示。角色与世界观权利归各自权利人所有。项目把官方明确事实、基于多条表现的归纳和原创情境分开处理，不声称生成内容属于官方剧情。
 
-## 快速运行
+## 运行
 
-要求 Node.js 20+，**无需安装第三方 npm 包**。
+要求 Node.js 20+，无第三方 npm 依赖。
 
 ```bash
-cd node-narrative-sim
 npm test
 npm start
 ```
 
-浏览器打开 `http://localhost:3000`。
-
-也可直接运行终端演示：
-
-```bash
-npm run demo
-```
-
-## 两种运行模式
-
-### 1. 离线规则模式（默认）
-
-不配置密钥即可运行。角色使用按叙事阶段编写的确定性行为模型，适合验证架构、状态机、护栏和 UI。
-
-### 2. OpenAI-compatible LLM 模式
-
-复制 `.env.example` 中的变量到运行环境（本项目不自动读取 `.env`，避免增加依赖）：
+打开 `http://localhost:3000`。不配置密钥时使用可测试的离线角色模型；配置 OpenAI-compatible API 后使用 LLM。
 
 ```bash
 export LLM_BASE_URL=https://api.openai.com/v1
@@ -39,92 +22,122 @@ export LLM_MODEL=gpt-4.1-mini
 npm start
 ```
 
-也可指向其他兼容 `/chat/completions` 且支持 JSON object response format 的服务。
+## v2 的核心变化
 
-## 架构
+### 1. 四层人物模型
+
+`data/personas.json` 不再只有几个价值观标签，而是包含：
+
+- **稳定人格**：需要、优点、缺点、防御机制、语言节奏；
+- **阶段人格**：同一角色在年轻、决裂、创伤、重建和归家阶段的差异；
+- **关系模型**：对兄弟、雾子、禅雅塔、父亲等不同对象的专属关系逻辑；
+- **爱好与日常**：只允许通过合适情境自然触发。
+
+源氏模型纳入了街机与游戏、竞争心、三角龙、恐龙鸡块、备餐、装甲维护、接受帮助，以及“逃避责任→主动承担”的成长轴。
+
+半藏模型纳入了诗和俳句、亲手制箭、木雕、花语、锦鲤、清酒、安静环境、未来养狗、被压制的游戏好奇，以及艺术型完美主义和羞耻结构。
+
+### 2. 潜台词与防御机制
+
+模型明确区分：
+
+- 角色内部真正需要什么；
+- 角色会用什么防御方式隐藏需要；
+- 角色最终会说出口什么。
+
+例如半藏内心可能是“不想再被弟弟留下”，实际台词更可能是“留下”，而不会准确解释自己的依恋创伤。
+
+### 3. 角色声线护栏
+
+`src/styleGuard.js` 检测：
+
+- 作者式长篇独白；
+- 抽象哲理词密度；
+- 直接解释潜台词；
+- “荣誉/家族/赎罪”模板半藏；
+- 失去玩心、持续讲禅理的源氏；
+- 过早请求宽恕或宣布痊愈；
+- 百科式罗列爱好。
+
+每次提案都会产生 `voiceScore`。低分动作会唤醒主持人修订。
+
+### 4. 条件式剧情推进
+
+v1 的“每两回合自动推进”已经移除。每个阶段都有：
+
+- 所需叙事信号；
+- 最低互动数；
+- 双方均参与的要求。
+
+例如童年阶段必须同时出现 `bond` 与 `duty_friction`，且源氏、半藏都实际行动，才能进入父亲去世阶段。单个角色重复行动不会推动时间线。
+
+### 5. 主持人权限收窄
+
+主持人负责：
+
+- 客观世界事实；
+- 角色自主权；
+- 重大状态结算；
+- 时间线边界；
+- 声线和阶段一致性；
+- 条件满足后的场景迁移。
+
+主持人不负责替角色规定每回合必须领悟什么，也不会把所有交流修成文学独白。
+
+## 项目结构
 
 ```text
-浏览器 / API 调用
-       │
-       ▼
-NarrativeEngine（唯一状态写入者）
-  ├─ ExecutorAgent: Genji
-  ├─ ExecutorAgent: Hanzo
-  ├─ Guardrails: 硬校验 + 风险评分
-  ├─ DirectorAgent: 高风险动作深度审核
-  ├─ MemoryStore: 阶段过滤 + 轻量语义相似度
-  └─ WorldState: 版本、场景、人物、节点、审计历史
+data/
+  personas.json       四层角色模型
+  memories.json       带来源和标签的长期记忆种子
+  world.json          世界规则、节点和条件信号
+public/                浏览器控制台
+src/
+  agents.js            执行者和主持人
+  engine.js            唯一世界状态写入者
+  guardrails.js        世界规则、越权与风险审核
+  styleGuard.js        角色语言和潜台词审核
+  ruleModel.js         无 API Key 时的角色化离线模型
+  memory.js            轻量语义检索
+  llm.js               OpenAI-compatible 客户端
+  server.js            REST + SSE 服务
+test/                  引擎、声线和 HTTP 测试
 ```
-
-### 核心工作流
-
-1. 执行者根据人物档案、当前阶段、最近历史和相关记忆提出结构化动作。
-2. 硬校验检查 JSON 形状；风险层检测时代错置、不可逆动作、替他人决策、角色偏离和循环。
-3. 低风险动作直接通过；高风险动作按需提交主持人。
-4. 主持人批准、修订或驳回，且所有结果进入审计历史。
-5. `NarrativeEngine` 只应用白名单状态路径，防止执行者直接篡改另一角色或全局状态。
-6. 每两个回合完成一个里程碑并推进下一叙事阶段（MVP 策略，可替换为条件图）。
 
 ## API
 
-- `GET /api/health`：模式和模型信息
-- `GET /api/state`：当前公开世界状态
-- `GET /api/events`：SSE 状态与回合事件
-- `POST /api/turn`：执行单回合
-- `POST /api/auto`：自动执行 1–20 回合
-- `POST /api/reset`：重置世界
-
-单回合示例：
+- `GET /api/health`
+- `GET /api/state`
+- `GET /api/events`
+- `POST /api/turn`
+- `POST /api/auto`
+- `POST /api/reset`
 
 ```bash
 curl -X POST http://localhost:3000/api/turn \
   -H 'content-type: application/json' \
-  -d '{"actor":"genji","direction":"谈及父亲，但不要立即和解"}'
+  -d '{"actor":"genji","direction":"用生活化情境表现兄弟关系，不要讨论宏大命运"}'
 ```
 
-也可传入完整 `proposal`，用于测试护栏：
+## 资料依据与证据边界
 
-```json
-{
-  "actor": "genji",
-  "proposal": {
-    "action": "源氏后退一步",
-    "dialogue": "我不会替你决定什么。",
-    "intent": "保持边界",
-    "emotion": "克制",
-    "stateChanges": [{"path":"characters.genji.emotion","value":"克制"}]
-  }
-}
-```
+主要事实依据：
 
-## 与附件目标的对应关系
+- 源氏官方英雄页：https://overwatch.blizzard.com/en-us/heroes/genji/
+- 半藏官方英雄页：https://overwatch.blizzard.com/en-us/heroes/hanzo/
+- 官方动画《Dragons》：https://www.youtube.com/watch?v=oJ09xdxzIJQ
+- 游戏内互动语音整理：
+  - https://overwatch.fandom.com/wiki/Genji/Quotes
+  - https://overwatch.fandom.com/wiki/Hanzo/Quotes
 
-- 主持人-执行者分层：已实现
-- 按风险唤醒主持人：已实现，阈值可配置
-- 世界模型与关键节点：已实现
-- 短期记忆：回合历史已实现
-- 长期记忆：本地语义检索 MVP 已实现；可替换为向量数据库
-- 人设与阶段性人物弧：已实现
-- 语义/规则护栏：轻量版本已实现
-- 叙事停滞干预：记录与接口已预留；当前按回合推进
-- GPT 协作者生成 NPC/事件：尚未单独拆分，LLM 模式下可作为后续 `WriterAgent` 增加
-- Redis、向量数据库、LangGraph.js：MVP 为零依赖实现，生产版可按下述方向升级
+互动语音页面为社区整理，但语料来自游戏内实际对白。关键世界观事实优先以官方英雄页与官方故事为准。人物模型中的心理机制属于基于多条官方表现的建模归纳，不应被描述为官方直接声明。
 
-## 生产化建议
+## 测试覆盖
 
-1. 将内存状态迁移至 Redis，并用乐观锁维护 `version`。
-2. 将 `MemoryStore` 替换为 Qdrant、Chroma 或 pgvector，加入 embedding 与来源字段。
-3. 用 LangGraph.js 表达条件边和回滚节点，而不是固定的“两回合推进”。
-4. 增加独立 `WriterAgent`，其新增世界事实必须经过主持人批准。
-5. 对 LLM 调用增加超时、重试、熔断、令牌预算和可观测性。
-6. 将官方事实与同人推断分层存储，记录出处、置信度与时间线版本。
-7. 增加用户身份、会话隔离、持久化快照和回放测试。
-
-## 目录
-
-```text
-data/       世界、人物和记忆种子
-public/     浏览器叙事控制台
-src/        引擎、Agent、护栏、模型客户端、HTTP 服务
- test/      Node 内置测试
-```
+- 条件信号推进，而非固定回合推进；
+- 双方参与要求；
+- 时代错置驳回；
+- 禁止修改另一角色；
+- 模板化半藏独白检测；
+- 生活化成熟源氏台词放行；
+- HTTP 服务与网页访问。
