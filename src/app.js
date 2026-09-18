@@ -9,7 +9,7 @@ export function createApp() {
   const memory = new MemoryStore(config.memories);
   const llm = new OpenAICompatibleClient(config.llm);
   const executors = Object.fromEntries(Object.entries(config.personas).map(([id, persona]) => [id, new ExecutorAgent({ id, persona, llm, memory })]));
-  const director = new DirectorAgent({ llm, world: config.world });
+  const director = new DirectorAgent({ llm, world: config.world, personas: config.personas });
   const engine = new NarrativeEngine({ world: config.world, personas: config.personas, executors, director, reviewThreshold: config.reviewThreshold });
   return { config, memory, llm, engine };
 }
