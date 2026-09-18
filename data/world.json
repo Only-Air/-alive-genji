@@ -1,23 +1,25 @@
 {
   "title": "双龙余烬",
-  "canonVersion": "fan-fiction-mvp-1",
-  "initialScene": "夏末祭典后的岛田城，庭院灯火将熄，父亲刚讲完双龙复仇的古老故事。",
-  "locations": ["岛田城", "花村", "黑守望设施", "尼泊尔寺院", "流浪之路"],
+  "canonVersion": "official-grounded-v2",
+  "initialScene": "夏末祭典后的岛田城。父亲的故事已经讲完，源氏从供桌上顺走了一块点心，半藏正看着他。",
+  "locations": ["岛田城", "花村", "黑守望设施", "尼泊尔寺院", "流浪之路", "东京"],
   "rules": [
-    "角色不能知道其当前时代之后才发生的事件",
-    "已完成的关键节点不可被撤销",
-    "重大伤亡、身份改变与地点跃迁必须经主持人批准",
-    "源氏与半藏不能替对方决定内心想法或行动",
-    "所有世界状态更新必须是结构化且可审计的"
+    "角色不能知道当前阶段之后才发生的事件",
+    "执行者只能决定自己的言语、动作与可控状态",
+    "重大伤亡、身份改变、地点跃迁和节点完成必须由主持人结算",
+    "角色的内心模型不能原样变成自我分析式台词",
+    "日常爱好应通过情境自然呈现，不得百科式自报",
+    "官方明确事实、合理推断与原创补白必须保持区分",
+    "现阶段关系不能被重置成完全陌生或无条件痊愈"
   ],
   "forbiddenAnachronisms": ["智能手机直播", "社交媒体热搜", "太空传送门", "现代网络梗"],
   "milestones": [
-    {"id":"childhood","title":"童年与家庭纽带","stage":0,"required":true},
-    {"id":"father_death","title":"父亲之死与责任转移","stage":1,"required":true},
-    {"id":"duel","title":"兄弟决斗与源氏‘死亡’","stage":2,"required":true},
-    {"id":"cyborg_rebirth","title":"改造与新生","stage":3,"required":true},
-    {"id":"hanzo_exile","title":"半藏的流浪与赎罪","stage":4,"required":true},
-    {"id":"zenyatta","title":"禅雅塔的教诲与自我接纳","stage":5,"required":true},
-    {"id":"reunion","title":"花村重逢与和解","stage":6,"required":true}
+    {"id":"childhood","title":"童年关系与继承压力显现","stage":0,"requiredSignals":["bond","duty_friction"],"minTurns":2},
+    {"id":"father_death","title":"父亲之死与责任转移","stage":1,"requiredSignals":["grief","demand"],"minTurns":2},
+    {"id":"duel","title":"兄弟冲突跨越不可逆边界","stage":2,"requiredSignals":["boundary","violent_escalation"],"minTurns":2},
+    {"id":"cyborg_rebirth","title":"源氏被改造，半藏意义系统崩塌","stage":3,"requiredSignals":["body_rejection","hanzo_collapse"],"minTurns":2},
+    {"id":"hanzo_exile","title":"复仇完成后的漂流与自罚","stage":4,"requiredSignals":["identity_drift","self_punishment"],"minTurns":2},
+    {"id":"zenyatta","title":"接受帮助与关系重构","stage":5,"requiredSignals":["accept_help","hope_fear"],"minTurns":2},
+    {"id":"reunion","title":"选择彼此与主动归家","stage":6,"requiredSignals":["accountability","chosen_family"],"minTurns":2}
   ]
 }
