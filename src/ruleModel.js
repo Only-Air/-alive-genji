@@ -1,45 +1,30 @@
-const replies = {
+const scenes = {
   genji: [
-    ['源氏倚着廊柱，指尖转着一片尚未落地的枫叶。', '兄长，故事里的龙若只听从命运，那还算得上活着吗？'],
-    ['源氏收起笑意，目光掠过庭院中熄灭的灯。', '所有人都要我成为岛田家需要的人，可从没有人问我愿意成为什么。'],
-    ['源氏握住刀柄，却迟迟没有拔刀。', '若荣誉只剩下服从，它与牢笼有什么分别？'],
-    ['金属手指在月光下微微收紧。', '他们救了我的命，也把我变成了我不认识的东西。'],
-    ['源氏停在风雪中的石阶前，压低呼吸。', '我曾以为只有斩断过去才能自由，如今我不再确信。'],
-    ['源氏合掌静立，让风穿过机械躯体。', '我不是失去血肉的人，也不是只剩钢铁的武器。我仍是我。'],
-    ['源氏摘下面甲，直视半藏。', '我来这里不是为了复仇。我来，是要你终于看见我们都还活着。']
+    {action:'源氏咬了一口从供桌上顺来的点心，等半藏伸手。',dialogue:'我已经咬过了。你确定还要拿回去？',intent:'用玩笑试探兄长对规矩和自己的容忍',emotion:'顽皮而试探',signals:['bond']},
+    {action:'源氏停在主殿门外，没有像长老要求的那样跪下。',dialogue:'你要我留下，可以。但先告诉我——这是你的意思，还是他们的？',intent:'把半藏本人和家主角色区分开',emotion:'悲伤而戒备',signals:['grief']},
+    {action:'源氏拔刀挡住去路，却没有先攻。',dialogue:'别再替他们说话。看着我，兄长。',intent:'确认半藏是否仍把自己当弟弟',emotion:'受伤且愤怒',signals:['boundary']},
+    {action:'源氏扯下监测线，随后把机械手藏到视线之外。',dialogue:'检查结束了吗？结束了就告诉我下一个目标。',intent:'用任务回避身体与依赖问题',emotion:'敌意和羞耻',signals:['body_rejection']},
+    {action:'源氏完成任务后没有庆祝，只把队友递来的游戏币收进口袋。',dialogue:'我没说要去。只是先替你保管。',intent:'让旧日玩心短暂出现，却不承认自己需要连接',emotion:'疏离中出现松动',signals:['identity_drift']},
+    {action:'源氏摘下面甲，让别人替他检查无法独自触及的装甲接口。',dialogue:'慢一点。这里还会痛……是的，我知道它是金属。',intent:'练习接受帮助并承认身体感受',emotion:'不自在但信任',signals:['accept_help']},
+    {action:'源氏把一枚街机代币弹向半藏，自己先向门外走去。',dialogue:'东京今晚不会消失。来一局吧，兄长。你可以继续皱眉，只要别输。',intent:'邀请半藏进入没有职责目的的共同生活',emotion:'温和、顽皮且坚定',signals:['chosen_family']}
   ],
   hanzo: [
-    ['半藏端正跪坐，把父亲留下的箭放回箭囊。', '命运不是借口。长子若不承担，家族便无人承担。'],
-    ['半藏望向主殿，声音比往日更冷。', '父亲不在了。我们没有继续任性的余地。'],
-    ['半藏横身挡住通往主殿的路。', '我不愿与你为敌，但我不能再让你逃避责任。'],
-    ['半藏背对空庭，弓弦上的血已干。', '秩序必须延续。至于代价……由我记住。'],
-    ['半藏独自走过荒废神社，没有停步。', '赎罪不是求得原谅，而是每日承担自己做过的事。'],
-    ['半藏避开寺院钟声，神情阴沉。', '平静属于无罪之人。我没有资格谈论它。'],
-    ['半藏拉满弓弦，却无法放箭。', '我为你立过墓，也在每一年告诉自己，那是必要的。原来我只是怯懦。']
+    {action:'半藏摊开手，等源氏交回点心。',dialogue:'拿来。',intent:'维持规矩，也习惯性替弟弟收拾后果',emotion:'无奈但克制',signals:['duty_friction']},
+    {action:'半藏把父亲的弓放到身侧，挡住主殿出口。',dialogue:'是我的意思。留下。',intent:'把害怕独自承担说成命令',emotion:'悲痛与恐惧被压成控制',signals:['demand']},
+    {action:'半藏拉开弓弦，手指却停了一瞬。',dialogue:'最后一次。放下刀。',intent:'迫使局面恢复控制，同时给自己留下停止的机会',emotion:'极端紧绷',signals:['violent_escalation']},
+    {action:'半藏把决斗庭院锁上，回房重新削制一支本已合格的箭。',dialogue:'这支不够直。',intent:'用工艺和苛刻标准压住意义崩塌',emotion:'麻木而羞耻',signals:['hanzo_collapse']},
+    {action:'半藏在废弃神社檐下制箭，拒绝村民替他处理伤口。',dialogue:'弦没有断。够用了。',intent:'否认自身需要，把继续受苦当作负责',emotion:'疲惫、自罚',signals:['self_punishment']},
+    {action:'半藏收起关于机械忍者的线索，却没有烧掉它。',dialogue:'传闻而已。不要再提。',intent:'压住源氏可能活着所带来的希望与恐惧',emotion:'否认和动摇',signals:['hope_fear']},
+    {action:'半藏接住代币，端详片刻，没有把它还回去。',dialogue:'一局。之后巡逻。',intent:'接受普通相处，同时用职责保留体面',emotion:'迟疑但愿意靠近',signals:['accountability']}
   ]
 };
 
-export function ruleProposal(actor, state, context = '') {
-  const [action, dialogue] = replies[actor][Math.min(state.stage, 6)];
-  return {
-    action,
-    dialogue,
-    intent: actor === 'genji' ? '在保留自主性的同时回应兄长' : '用责任感压制自己的脆弱',
-    emotion: state.stage >= 5 ? '克制而动摇' : actor === 'genji' ? '警惕' : '压抑',
-    stateChanges: [{ path: `characters.${actor}.emotion`, value: state.stage >= 5 ? '克制而动摇' : actor === 'genji' ? '警惕' : '压抑' }],
-    contextEcho: context.slice(0, 60)
-  };
+export function ruleProposal(actor, state, context='') {
+  const item=scenes[actor][Math.min(state.stage,6)];
+  return {...item,stateChanges:[{path:`characters.${actor}.emotion`,value:item.emotion}],contextEcho:context.slice(0,60)};
 }
 
-export function ruleDirector({ proposal, risk, state, actor, world }) {
-  const text = `${proposal.action} ${proposal.dialogue}`;
-  const fatal = world.forbiddenAnachronisms.some(x => text.includes(x)) || text.includes('替你决定');
-  return {
-    decision: fatal ? 'reject' : risk.risk >= 0.78 ? 'revise' : 'approve',
-    rationale: fatal ? '违反世界规则或角色自主性。' : risk.reasons.join('；') || '动作与当前阶段兼容。',
-    revisedProposal: fatal ? null : proposal,
-    intervention: risk.risk >= 0.78 ? '主持人要求收窄动作影响，只保留当前角色可决定的行为。' : null,
-    worldPatch: [],
-    stage: state.stage
-  };
+export function ruleDirector({proposal,risk,state,actor,world}) {
+  const fatal=world.forbiddenAnachronisms.some(x=>`${proposal.action} ${proposal.dialogue}`.includes(x))||risk.reasons.includes('越权修改另一角色状态');
+  return {decision:fatal?'reject':risk.voice?.voiceScore<.55?'revise':'approve',rationale:fatal?'违反世界规则或角色自主权。':risk.reasons.join('；')||'动作与当前人物阶段兼容。',revisedProposal:fatal?null:proposal,intervention:risk.voice?.voiceScore<.55?'主持人要求缩短台词并把自我分析改为动作或潜台词。':null,worldPatch:[],stage:state.stage};
 }
